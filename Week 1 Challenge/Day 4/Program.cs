@@ -1,2 +1,8 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using System;
+using LinkedList;
+
+Sequence sequence = new();
+
+sequence.Append(5);
+sequence.Append(10);
+sequence.Print();
