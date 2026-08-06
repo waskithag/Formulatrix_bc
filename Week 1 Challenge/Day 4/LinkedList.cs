@@ -15,7 +15,7 @@ class Sequence
 
     public void Append(int val)
     {
-        Node newNode = new(val);
+        Node? newNode = new(val);
 
         if (head == null)
         {
@@ -34,7 +34,7 @@ class Sequence
     {
         Console.Write("Sequence: ");
 
-        Node current = head;
+        Node? current = head;
         while (current != null)
         {
             Console.Write(current.Value);
