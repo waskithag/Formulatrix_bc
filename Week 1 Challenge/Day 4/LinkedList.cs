@@ -4,27 +4,27 @@ namespace LinkedList;
 
 class Node(int value)
 {
-    public int Value = value;
+    public int? Value = value;
     public Node? Next = null;
 }
 
 class Sequence
 {
-    private Node? head;
-    private Node? tail;
+    private Node? _head;
+    private Node? _tail;
 
     public void Append(int val)
     {
         Node? newNode = new(val);
 
-        if (head == null)
+        if (_head == null)
         {
-            head = tail = newNode;
+            _head = _tail = newNode;
         }
         else
         {
-            tail.Next = newNode;
-            tail = newNode;
+            _tail.Next = newNode;
+            _tail = newNode;
         }
 
         Console.WriteLine($"Appended {val}");
@@ -34,7 +34,7 @@ class Sequence
     {
         Console.Write("Sequence: ");
 
-        Node? current = head;
+        Node? current = _head;
         while (current != null)
         {
             Console.Write(current.Value);
