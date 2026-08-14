@@ -10,20 +10,20 @@ classDiagram
     }
 
     class Deck{
-        +Stack~Card~ deckPiles 
-        +Stack~Card~ discardPiles 
-        
+        +Stack~Card~ deckPiles  
         +Deck()
-        +GetCard() : Card
-        +DiscardCard(Card card) : void
-        +Shuffle() : void
+    }
+
+    class Discarded{
+        +Stack~Card~ discardPiles
     }
 
     class GameController{
         -List~Player~  _players
         -Dictionary~Player, List~Card~~ _cardInHand  
         -Deck _deck 
-        -int _gameDirection 
+        -Dicarded _discardPile
+        -GameDirection _gameDirection 
         -int _currentPlayerIndex 
         -bool _turnSkipped = false 
 
@@ -31,14 +31,27 @@ classDiagram
         +AddPlayer() : void
         +DistributeCard() : void
         +PlayerTurn(Player player) : void
+
         +CheckPlayableCard(Player player) : List~int~
         +CheckCardPlaibility(Card card) : bool
-        +CheckPlayedCard(Card card) : Card
-        +SpecialCardPlayed() : void
+        +PlayCard(Card card) : void
         +CheckIfWinner(Player player) : bool
-        +NextTurn() : void
+        +CheckPlayedCard(Card card) : void
+        +SpecialCardPlayed() : void
+
+        +NextTurn(bool skipped) : void
 
         +DrawCard(Player) : void
+        +DiscardCard(Card card) : void
+        +Shuffle() : void
+        +RenewDeck() : void
+
+        +isUno() : bool
+        +CallUno() : void
+
+        +GetCurrentPlayerIndex() : int
+        +GetCurrentTopPile() : card
+        +GetPlayerCard(Player player) : List~Card~
      }
 
     class Color{
@@ -69,11 +82,20 @@ classDiagram
         wild
     }
 
-    Deck *-- Card 
+    class GameDirection{
+        <<enumeration>>
+        clockwise,
+        counterClockwise
+    }
+
+    Deck *-- Card
+    Discarded *-- Card 
 
     Card *-- Color
     Card *-- CardValue
     
     GameController <-- Player
     GameController <-- Deck
+    GameController <-- Discarded
+    GameController *-- GameDirection
 ```
