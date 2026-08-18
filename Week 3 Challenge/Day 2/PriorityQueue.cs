@@ -7,25 +7,61 @@ class QueueNode
 {
     public string Value { get; }
     public int PriorityValue { get; }
+
+    public QueueNode(string value, int priority)
+    {
+        Value = value;
+        PriorityValue = priority;
+    }
 }
 
-class PriorityQueue
+class PriorityQue
 {
-    private LinkedList<QueueNode> _priorityQueueNodes = new();
+    private readonly LinkedList<QueueNode> _priorityQueueNodes = new();
 
-    public Enqueue(string value, int priority)
+    public void Enqueue(string value, int priority)
     {
-        if(_priorityQueueNodes.Count == 0)
+        QueueNode newNode = new(value, priority);
+
+        Console.WriteLine($"Queued {value} with priority {priority}");
+
+        if (_priorityQueueNodes.Count == 0)
         {
-            _priorityQueueNodes.AddLast(QueueNode(value, priority));
+            _priorityQueueNodes.AddFirst(newNode);
+            return;
+        }
+
+        LinkedListNode<QueueNode>? current = _priorityQueueNodes.First;
+
+        while (current != null && current.Value.PriorityValue <= priority)
+        {
+            current = current.Next;
+        }
+
+        if (current == null)
+        {
+            _priorityQueueNodes.AddLast(newNode);
         }
         else
         {
-            nodeNow = _priorityQueueNodes.Last;
-            while (move == true)
-            {
-                if (nodeNow.Value.PriorityValue <= )
-            }
+            _priorityQueueNodes.AddBefore(current, newNode);
         }
+
+        
+    }
+
+    public void Process()
+    {
+        if (_priorityQueueNodes.First == null)
+        {
+            Console.WriteLine("No queue to process");
+            return;
+        }
+
+        QueueNode nodeToProcess = _priorityQueueNodes.First.Value;
+
+        Console.WriteLine($"Processed {nodeToProcess.Value}");
+
+        _priorityQueueNodes.RemoveFirst();
     }
 }
