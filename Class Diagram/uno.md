@@ -20,12 +20,13 @@ classDiagram
 
     class GameController{
         -List~Player~  _players
-        -Dictionary~Player, List~Card~~ _cardInHand  
+        -Dictionary ~Player, List<.Card>~  _cardInHand  
         -Deck _deck 
         -Dicarded _discardPile
         -GameDirection _gameDirection 
         -int _currentPlayerIndex 
         -bool _turnSkipped = false 
+        -Dictionary ~Player, bool called~  _calledUno 
 
         +Play() : void
         +AddPlayer() : void
