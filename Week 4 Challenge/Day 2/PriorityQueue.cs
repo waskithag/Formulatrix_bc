@@ -3,42 +3,42 @@ using System.Collections.Generic;
 
 namespace PriorityQueue;
 
-class QueueNode(string value, int priority)
+public class QueueNode(string value, int priority)
 {
     public string Value { get; } = value;
-    public int PriorityValue { get; } = priority;
+    public int Priority { get; } = priority;
 }
 
-class PriorityQue
+public class PriorityQue
 {
     private readonly Dictionary<string, int> _rules = new();
     private readonly List<QueueNode> _priorityQueueNodes = new();
 
-
     public void AddRule(string keyword, int priority)
     {
-        rules[keyword] = priority;
+        ArgumentException.ThrowIfNullOrWhiteSpace(keyword);
+
+        _rules[keyword] = priority;
     }
+
     public void Enqueue(string value)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
 
-        int priority = 0;
+        int priority = GetPriority(value);
+        QueueNode newNode = new(value, priority);
 
-        if (rules.ContainsKey("val"))
+        // Insert after existing nodes with the same priority.
+        // This preserves FIFO ordering for equal-priority items.
+        int index = 0;
+
+        while (index < _priorityQueueNodes.Count &&
+               _priorityQueueNodes[index].Priority >= newNode.Priority)
         {
-            priority = _rules[val];
+            index++;
         }
 
-        QueueNode newNode = QueueNode(value, priority);
-
-        int i = 0;
-
-        while (i < _priorityQueueNodes.Count && _priorityQueueNodes[index].Priority >= newNode.Priority)
-        {
-            i++;
-        }
-
-        _priorityQueueNodes.Insert(index, newItem);
+        _priorityQueueNodes.Insert(index, newNode);
 
         Console.WriteLine($"Queued {value} with priority {priority}");
     }
@@ -51,10 +51,25 @@ class PriorityQue
             return;
         }
 
-        QueueNode nodeToProcess = _priorityQueueNodes.First.Value;
+        QueueNode nodeToProcess = _priorityQueueNodes[0];
 
         Console.WriteLine($"Processed {nodeToProcess.Value}");
 
         _priorityQueueNodes.RemoveAt(0);
+    }
+
+    private int GetPriority(string value)
+    {
+        int priority = 0;
+
+        foreach (KeyValuePair<string, int> rule in _rules)
+        {
+            if (value.Contains(rule.Key, StringComparison.OrdinalIgnoreCase))
+            {
+                priority = Math.Max(priority, rule.Value);
+            }
+        }
+
+        return priority;
     }
 }
