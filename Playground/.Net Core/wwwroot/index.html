@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Management System</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Header with JWT Authentication -->
+    <header>
+      <div>
+        <h1>Sales Management System</h1>
+        <small style="color: #64748b;">.NET Core CRUD &bull; FluentAPI &bull; AutoMapper &bull; JWT</small>
+      </div>
+
+      <div class="auth-panel" id="authSection">
+        <input type="text" id="authUsername" placeholder="Username (admin)" value="admin" />
+        <input type="password" id="authPassword" placeholder="Password (admin123)" value="admin123" />
+        <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">Login</button>
+      </div>
+
+      <div class="auth-panel" id="loggedInSection" style="display: none;">
+        <span class="badge-user" id="userBadge">admin</span>
+        <button class="btn btn-secondary btn-sm" onclick="handleLogout()">Logout</button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tabProducts" onclick="switchTab('products')">Products</button>
+      <button class="tab-btn" id="tabEmployees" onclick="switchTab('employees')">Employees</button>
+      <button class="tab-btn" id="tabSales" onclick="switchTab('sales')">Sales</button>
+    </div>
+
+    <!-- Notification Bar -->
+    <div id="notification"></div>
+
+    <!-- Two-Column Main Layout -->
+    <div class="main-layout">
+      <!-- Left: Input Zone -->
+      <div class="input-zone">
+        <h2 id="formTitle">Add Product</h2>
+        <form id="crudForm" onsubmit="handleFormSubmit(event)">
+          <!-- Hidden Input for Editing ID -->
+          <input type="hidden" id="editId" value="" />
+
+          <!-- Product Fields -->
+          <div id="productFields">
+            <div class="form-group">
+              <label for="productName">Product Name *</label>
+              <input type="text" id="productName" placeholder="e.g. Sabun" />
+            </div>
+            <div class="form-group">
+              <label for="productPrice">Price *</label>
+              <input type="number" id="productPrice" step="0.01" min="0" placeholder="e.g. 10000" />
+            </div>
+            <div class="form-group">
+              <label for="productStock">Stock *</label>
+              <input type="number" id="productStock" min="0" placeholder="e.g. 100" />
+            </div>
+          </div>
+
+          <!-- Employee Fields -->
+          <div id="employeeFields" style="display: none;">
+            <div class="form-group">
+              <label for="employeeName">Employee Name *</label>
+              <input type="text" id="employeeName" placeholder="e.g. John Doe" />
+            </div>
+          </div>
+
+          <!-- Sales Fields -->
+          <div id="salesFields" style="display: none;">
+            <div class="form-group">
+              <label for="salesEmployee">Select Employee *</label>
+              <select id="salesEmployee">
+                <option value="">-- Select Employee --</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Select Products</label>
+              <div class="checkbox-list" id="salesProductCheckboxes">
+                <!-- Checkboxes populated dynamically -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Buttons -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submitBtn">Save</button>
+            <button type="button" class="btn btn-secondary" id="cancelBtn" onclick="resetForm()" style="display: none;">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right: Data Table Zone -->
+      <div class="table-zone">
+        <div class="table-header">
+          <h2 id="tableTitle">Product Records</h2>
+          <button class="btn btn-secondary btn-sm" onclick="loadData()">Refresh</button>
+        </div>
+
+        <table id="dataTable">
+          <thead id="tableHead">
+            <!-- Populated dynamically -->
+          </thead>
+          <tbody id="tableBody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
