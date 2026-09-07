@@ -38,21 +38,6 @@ public class ProductService : IProductService
 
     public async Task<ServiceResult<ProductDto>> CreateAsync(CreateProductDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            return ServiceResult<ProductDto>.Fail("Product name is required.", 400);
-        }
-
-        if (dto.Price < 0)
-        {
-            return ServiceResult<ProductDto>.Fail("Product price cannot be negative.", 400);
-        }
-
-        if (dto.Stock < 0)
-        {
-            return ServiceResult<ProductDto>.Fail("Product stock cannot be negative.", 400);
-        }
-
         var existingName = await _repository.GetByNameAsync(dto.Name);
         if (existingName != null)
         {
@@ -68,21 +53,6 @@ public class ProductService : IProductService
 
     public async Task<ServiceResult<ProductDto>> UpdateAsync(int id, UpdateProductDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            return ServiceResult<ProductDto>.Fail("Product name is required.", 400);
-        }
-
-        if (dto.Price < 0)
-        {
-            return ServiceResult<ProductDto>.Fail("Product price cannot be negative.", 400);
-        }
-
-        if (dto.Stock < 0)
-        {
-            return ServiceResult<ProductDto>.Fail("Product stock cannot be negative.", 400);
-        }
-
         var existing = await _repository.GetByIdAsync(id);
         if (existing == null)
         {

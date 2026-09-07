@@ -1,8 +1,12 @@
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NetCoreApp.Common;
 using NetCoreApp.Data;
 using NetCoreApp.Mappings;
 using NetCoreApp.Repositories;
@@ -58,8 +62,27 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// 6. Controllers and API documentation
+// 6. FluentValidation & Controllers
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddControllers();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var errors = context.ModelState
+            .Where(e => e.Value?.Errors.Count > 0)
+            .SelectMany(e => e.Value!.Errors.Select(err => err.ErrorMessage))
+            .ToList();
+
+        var message = errors.Count > 0 ? string.Join(" ", errors) : "Validation failed.";
+        var result = ServiceResult<object>.Fail(message, StatusCodes.Status400BadRequest);
+        return new BadRequestObjectResult(result);
+    };
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -67,7 +90,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Sales Management API",
         Version = "v1",
-        Description = "ASP.NET Core CRUD Web API with JWT Authentication, Repository Pattern, FluentAPI & AutoMapper"
+        Description = "ASP.NET Core CRUD Web API with JWT Authentication, Repository Pattern, FluentAPI, FluentValidation & AutoMapper"
     });
 
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

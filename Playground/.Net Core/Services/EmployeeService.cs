@@ -38,11 +38,6 @@ public class EmployeeService : IEmployeeService
 
     public async Task<ServiceResult<EmployeeDto>> CreateAsync(CreateEmployeeDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            return ServiceResult<EmployeeDto>.Fail("Employee name is required.", 400);
-        }
-
         var employee = _mapper.Map<Employee>(dto);
         var created = await _repository.AddAsync(employee);
         var resultDto = _mapper.Map<EmployeeDto>(created);
@@ -52,11 +47,6 @@ public class EmployeeService : IEmployeeService
 
     public async Task<ServiceResult<EmployeeDto>> UpdateAsync(int id, UpdateEmployeeDto dto)
     {
-        if (string.IsNullOrWhiteSpace(dto.Name))
-        {
-            return ServiceResult<EmployeeDto>.Fail("Employee name is required.", 400);
-        }
-
         var existing = await _repository.GetByIdAsync(id);
         if (existing == null)
         {

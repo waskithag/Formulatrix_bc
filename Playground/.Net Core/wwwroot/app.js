@@ -149,7 +149,7 @@ async function loadData() {
           <tr>
             <td>${p.id}</td>
             <td><strong>${escapeHtml(p.name)}</strong></td>
-            <td>$${Number(p.price).toFixed(2)}</td>
+            <td>Rp.${Number(p.price).toFixed(2)}</td>
             <td>${p.stock}</td>
             <td class="table-actions">
               <button class="btn btn-secondary btn-sm" onclick="startEditProduct(${p.id})">Edit</button>
@@ -209,7 +209,7 @@ async function loadData() {
       if (result.success && result.data && result.data.length > 0) {
         tbody.innerHTML = result.data.map(s => {
           const productList = (s.products && s.products.length > 0)
-            ? s.products.map(p => `<span class="badge-tag">${escapeHtml(p.name)} ($${Number(p.price).toFixed(2)})</span>`).join(' ')
+            ? s.products.map(p => `<span class="badge-tag">${escapeHtml(p.name)} (Rp.${Number(p.price).toFixed(2)})</span>`).join(' ')
             : '<em>None</em>';
 
           return `
@@ -217,7 +217,7 @@ async function loadData() {
               <td>${s.id}</td>
               <td><strong>${escapeHtml(s.employeeName || ('Employee #' + s.employeeId))}</strong></td>
               <td>${productList}</td>
-              <td>$${Number(s.totalPrice || 0).toFixed(2)}</td>
+              <td>Rp.${Number(s.totalPrice || 0).toFixed(2)}</td>
               <td class="table-actions">
                 <button class="btn btn-secondary btn-sm" onclick="startEditSales(${s.id}, ${s.employeeId}, [${(s.products || []).map(p => p.id).join(',')}])">Edit</button>
                 <button class="btn btn-danger btn-sm" onclick="deleteItem('sales', ${s.id})">Delete</button>
@@ -261,7 +261,7 @@ async function refreshSalesFormData() {
       checkContainer.innerHTML = cachedProducts.map(p => `
         <label class="checkbox-item">
           <input type="checkbox" name="salesProduct" value="${p.id}" id="prodCheck_${p.id}" />
-          <span>${escapeHtml(p.name)} - $${Number(p.price).toFixed(2)}</span>
+          <span>${escapeHtml(p.name)} - Rp.${Number(p.price).toFixed(2)}</span>
         </label>
       `).join('');
     }
